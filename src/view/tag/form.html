@@ -1,0 +1,35 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="TagTable">
+    <div class="layui-card-body padding-left-40">
+
+        <fieldset class="layui-bg-gray">
+            <legend><b class="layui-badge think-bg-violet">{:lang('标签信息')}</b></legend>
+            <div class="layui-row layui-col-space15">
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('标签分类名称')}</b>Name</span>
+                        <input name="name" value='{$vo.name|default=""}' required vali-name="{:lang('标签分类名称')}" placeholder="{:lang('请输入标签分类名称，如：音乐、动物、美食')}" class="layui-input">
+                    </label>
+                </div>
+
+                <div class="layui-col-xs12">
+                    <label class="block relative">
+                        <span class="help-label"><b>{:lang('子标签')}</b>Tags</span>
+                        <textarea name="value" required vali-name="{:lang('子标签')}" placeholder="{:lang('请输入子标签，多个标签用英文逗号分隔，如：歌曲,艺人,乐器,专辑')}" class="layui-textarea" rows="8">{$vo.value|default=''}</textarea>
+                        <span class="help-block" style="color:#999;font-size:12px;margin-top:4px;display:block">{:lang('多个子标签之间用英文逗号「,」分隔，保存时自动去除首尾空格')}</span>
+                    </label>
+                </div>
+
+            </div>
+        </fieldset>
+
+    </div>
+
+    <div class="hr-line-dashed"></div>
+    {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+
+    <div class="layui-form-item text-center">
+        <button class="layui-btn" type='submit'>{:lang('保存数据')}</button>
+        <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+    </div>
+</form>

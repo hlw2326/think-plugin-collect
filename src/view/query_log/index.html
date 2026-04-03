@@ -1,0 +1,113 @@
+{extend name="table"}
+
+{block name="button"}
+<!--{if auth("clear")}-->
+<a data-action='{:url("clear")}' data-confirm="{:lang('确定要清理过期日志吗？')}" data-callback="reload" data-table-id="QueryLogTable" class='layui-btn layui-btn-sm layui-btn-danger'>{:lang('清理日志')}</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+    {include file='query_log/index_search'}
+    <table id="QueryLogTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+</div>
+
+<label class="layui-hide">
+    <textarea id="PlatformsData">{:json_encode($platforms, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+<label class="layui-hide">
+    <textarea id="ActionsData">{:json_encode($actions, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+
+<script type="text/html" id="PlatformTpl">
+    {{- $.platformLabel(d.platform) }}
+</script>
+
+<script type="text/html" id="ChannelTpl">
+    {{# if(d.channel){ }}
+    <span class="layui-badge layui-bg-gray">{{- d.channel }}</span>
+    {{# } else { }}
+    <span class="color-desc">-</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="ActionTpl">
+    {{- $.actionLabel(d.action) }}
+</script>
+
+<script type="text/html" id="ExecTimeTpl">
+    {{# if(d.exec_time > 0){ }}
+    {{- d.exec_time }} ms
+    {{# } else { }}
+    <span class="color-desc">-</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="ResultTpl">
+    {{- $.resultLabel(d.result_code) }}
+</script>
+
+<script type="text/html" id="ResultMsgTpl">
+    {{# if(d.result_msg){ }}
+    <span class="color-red" title="{{- d.result_msg }}">{{- d.result_msg }}</span>
+    {{# } else { }}
+    <span class="color-desc">-</span>
+    {{# } }}
+</script>
+
+<script type="text/html" id="toolbar">
+    <!--{if auth("detail")}-->
+    <a class="layui-btn layui-btn-sm" data-modal='{:url("detail")}?id={{d.id}}' data-title="{:lang('查询详情')}">{:lang('查 看')}</a>
+    <!--{/if}-->
+</script>
+
+<script>
+    $.platformLabel = (function () {
+        var list = JSON.parse($('#PlatformsData').text());
+        return function (p) {
+            var item = list[p];
+            if (!item) return p;
+            return '<span class="layui-badge ' + item.class + '">' + item.label + '</span>';
+        };
+    })();
+
+    $.actionLabel = (function () {
+        var list = JSON.parse($('#ActionsData').text());
+        return function (a) {
+            var item = list[a];
+            if (!item) return a;
+            return '<span class="layui-badge ' + item.class + '">' + item.label + '</span>';
+        };
+    })();
+
+    $.resultLabel = (function () {
+        return function (code) {
+            if (code == 1) {
+                return '<span class="layui-badge layui-bg-green">{:lang("成功")}</span>';
+            }
+            return '<span class="layui-badge layui-bg-red">{:lang("失败")}</span>';
+        };
+    })();
+
+    $(function () {
+        $('#QueryLogTable').layTable({
+            even: true, height: 'full',
+            sort: {field: 'id', type: 'desc'},
+            cols: [[
+                {field: 'id', title: 'ID', width: 80, align: 'center', sort: true},
+                {field: 'platform', title: '{:lang("平台")}', width: 100, align: 'center', templet: '#PlatformTpl'},
+                {field: 'channel', title: '{:lang("渠道")}', width: 80, align: 'center', templet: '#ChannelTpl'},
+                {field: 'action', title: '{:lang("动作")}', width: 140, align: 'center', templet: '#ActionTpl'},
+                {field: 'param', title: '{:lang("参数")}', minWidth: 150},
+                {field: 'http_code', title: 'HTTP', width: 80, align: 'center'},
+                {field: 'exec_time', title: '{:lang("耗时")}', width: 100, align: 'center', templet: '#ExecTimeTpl'},
+                {field: 'result_code', title: '{:lang("结果")}', width: 80, align: 'center', templet: '#ResultTpl'},
+                {field: 'result_msg', title: '{:lang("错误信息")}', minWidth: 160, templet: '#ResultMsgTpl'},
+                {field: 'ip', title: 'IP', width: 130},
+                {field: 'create_at', title: '{:lang("查询时间")}', width: 170, align: 'center', sort: true},
+                {toolbar: '#toolbar', title: '{:lang("操作面板")}', align: 'left', fixed: 'right'}
+            ]]
+        });
+    });
+</script>
+{/block}

@@ -1,0 +1,90 @@
+<form action="{:sysuri()}" method="post" data-auto="true" class="layui-form layui-card" data-table-id="CookieTable">
+ <div class="layui-card-body padding-left-40">
+
+  <fieldset class="layui-bg-gray">
+   <legend><b class="layui-badge think-bg-violet">{:lang('基本信息')}</b></legend>
+   <div class="layui-row layui-col-space15">
+
+    <div class="layui-col-xs6">
+     <label class="block relative">
+      <span class="help-label"><b>{:lang('名称')}</b>Name</span>
+      <input name="name" value='{$vo.name|default=""}' required vali-name="{:lang('名称')}" class="layui-input">
+     </label>
+    </div>
+
+    <div class="layui-col-xs6">
+     <label class="block relative">
+      <span class="help-label"><b>{:lang('关联账号')}</b>Account</span>
+      <input name="account" value='{$vo.account|default=""}' vali-name="{:lang('关联账号')}" class="layui-input" placeholder="{:lang('选填')}">
+     </label>
+    </div>
+
+   </div>
+  </fieldset>
+
+  <fieldset class="layui-bg-gray">
+   <legend><b class="layui-badge think-bg-violet">{:lang('平台配置')}</b></legend>
+   <div class="layui-row layui-col-space15">
+
+    <div class="layui-col-xs6">
+     <label class="block relative">
+      <span class="help-label"><b>{:lang('平台')}</b>Platform</span>
+      <select name="platform" lay-filter="platform-select" class="layui-select" lay-append-to required>
+       <option value="">-- {:lang('请选择')} --</option>
+       {foreach $platforms as $k => $v}
+       <option value="{$k}" {if isset($vo.platform) && $vo.platform eq $k}selected{/if}>{$v.label}</option>
+       {/foreach}
+      </select>
+     </label>
+    </div>
+
+    <div class="layui-col-xs6">
+     <label class="block relative">
+      <span class="help-label"><b>{:lang('渠道')}</b>Channel</span>
+      <select name="channel" class="layui-select" lay-append-to required>
+       <option value="">-- {:lang('请选择')} --</option>
+       {foreach $channels as $k => $v}
+       <option value="{$k}" {if isset($vo.channel) && $vo.channel eq $k}selected{/if}>{$v.label}</option>
+       {/foreach}
+      </select>
+     </label>
+    </div>
+
+   </div>
+  </fieldset>
+
+  <fieldset class="layui-bg-gray">
+   <legend><b class="layui-badge think-bg-violet">{:lang('Cookie内容')}</b></legend>
+   <div class="layui-form-item">
+    <textarea name="cookie" rows="6" required vali-name="{:lang('Cookie内容')}" class="layui-textarea" placeholder="{:lang('请粘贴完整的Cookie字符串')}">{$vo.cookie|default=""}</textarea>
+   </div>
+  </fieldset>
+
+  <fieldset class="layui-bg-gray">
+   <legend><b class="layui-badge think-bg-violet">{:lang('其他设置')}</b></legend>
+   <div class="layui-row layui-col-space15">
+
+    <div class="layui-col-xs6">
+     <div class="help-label"><b>{:lang('启用状态')}</b>Status</div>
+     <div class="layui-textarea help-checks">
+      <label class="think-checkbox">
+       <input type="radio" name="status" value="1" {if !isset($vo.status) or $vo.status eq 1}checked{/if} lay-ignore>{:lang('启 用')}
+      </label>
+      <label class="think-checkbox">
+       <input type="radio" name="status" value="0" {if isset($vo.status) and $vo.status eq 0}checked{/if} lay-ignore>{:lang('禁 用')}
+      </label>
+     </div>
+    </div>
+
+   </div>
+  </fieldset>
+
+ </div>
+
+ <div class="hr-line-dashed"></div>
+ {notempty name='vo.id'}<input type='hidden' value='{$vo.id}' name='id'>{/notempty}
+ <div class="layui-form-item text-center">
+  <button class="layui-btn" type='submit'>{:lang('保存数据')}</button>
+  <button class="layui-btn layui-btn-danger" type='button' data-confirm="{:lang('确定要取消编辑吗？')}" data-close>{:lang('取消编辑')}</button>
+ </div>
+</form>

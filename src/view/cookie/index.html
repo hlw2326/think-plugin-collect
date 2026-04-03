@@ -1,0 +1,99 @@
+{extend name="../../admin/view/table"}
+
+{block name="button"}
+<!--{if auth("add")}-->
+<button data-modal='{:url("add")}' data-title="{:lang('添加Cookie')}" class='layui-btn layui-btn-sm layui-btn-primary'>{:lang('添加Cookie')}</button>
+<!--{/if}-->
+<!--{if auth("remove")}-->
+<a data-confirm="{:lang('确定要删除吗？')}" data-table-id="CookieTable" data-action='{:url("remove")}' data-rule="id#{id}" class='layui-btn layui-btn-sm layui-btn-danger'>{:lang('批量删除')}</a>
+<!--{/if}-->
+{/block}
+
+{block name="content"}
+<div class="think-box-shadow">
+ {include file='cookies/index_search'}
+ <table id="CookieTable" data-url="{:sysuri('index')}" data-target-search="form.form-search"></table>
+</div>
+
+<!-- 平台Badge模板 -->
+<script type="text/html" id="PlatformBadgeTpl">
+ {{- $.platformBadge(d.platform) }}
+</script>
+
+<!-- 渠道Badge模板 -->
+<script type="text/html" id="ChannelBadgeTpl">
+ {{- $.channelBadge(d.channel) }}
+</script>
+
+<!-- 最后验证时间模板 -->
+<script type="text/html" id="LastVerifyTpl">
+ {{# if(d.last_verify_time > 0){ }}
+ {{- layui.util.toDateString(d.last_verify_time * 1000, 'yyyy-MM-dd HH:mm') }}
+ {{# }else{ }}
+ <span class="color-gray">{:lang('未验证')}</span>
+ {{# } }}
+</script>
+
+<!-- 操作面板模板 -->
+<script type="text/html" id="toolbar">
+ <!--{if auth("edit")}-->
+ <a class="layui-btn layui-btn-sm" data-modal='{:url("edit")}?id={{d.id}}'>{:lang('编 辑')}</a>
+ <!--{/if}-->
+ <!--{if auth("remove")}-->
+ <a class="layui-btn layui-btn-sm layui-btn-danger" data-confirm="{:lang('确定删除？')}" data-action="{:url('remove')}" data-value="id#{{d.id}}">{:lang('删 除')}</a>
+ <!--{/if}-->
+</script>
+
+<script>
+ var langUnverified = '{:lang("未验证")}';
+
+ // 平台Badge函数
+ $.platformBadge = (function () {
+  var platforms = JSON.parse($('#PlatformTypesData').text());
+  return function (platform) {
+   var item = platforms[platform];
+   if (!item) return platform;
+   return '<span class="layui-badge ' + item.class + '">' + item.label + '</span>';
+  };
+ })();
+
+ // 渠道Badge函数
+ $.channelBadge = (function () {
+  var channels = JSON.parse($('#ChannelTypesData').text());
+  return function (channel) {
+   var item = channels[channel];
+   if (!item) return channel;
+   return '<span class="layui-badge ' + item.class + '">' + item.label + '</span>';
+  };
+ })();
+
+ $(function () {
+  $('#CookieTable').layTable({
+   even: true, height: 'full',
+   sort: {field: 'id', type: 'desc'},
+   cols: [[
+    {checkbox: true, fixed: true},
+    {field: 'id', title: 'ID', width: 70, align: 'center', sort: true},
+    {field: 'name', title: '{:lang("名称")}', minWidth: 120},
+    {field: 'platform', title: '{:lang("平台")}', width: 100, align: 'center', templet: '#PlatformBadgeTpl'},
+    {field: 'channel', title: '{:lang("渠道")}', width: 80, align: 'center', templet: '#ChannelBadgeTpl'},
+    {field: 'account', title: '{:lang("关联账号")}', minWidth: 120},
+    {field: 'last_verify_time', title: '{:lang("最后验证")}', width: 160, align: 'center', templet: '#LastVerifyTpl'},
+    {field: 'error_count', title: '{:lang("失败次数")}', width: 100, align: 'center', templet: '<div>{{d.error_count > 0 ? \'<span class="color-red">\' + d.error_count + \'</span>\' : \'<span class="color-green\">0</span>\'}}</div>'},
+    {field: 'status', title: '{:lang("状态")}', width: 100, align: 'center', templet: '#StatusSwitchTpl'},
+    {field: 'create_at', title: '{:lang("创建时间")}', width: 160, align: 'center', sort: true},
+    {toolbar: '#toolbar', title: '{:lang("操作面板")}', width: 200, align: 'left', fixed: 'right'}
+   ]]
+  });
+  layui.form.on('switch(StatusSwitch)', function (obj) {
+   var data = {id: obj.value, status: obj.elem.checked > 0 ? 1 : 0};
+   $.form.load("{:url('state')}", data, 'post', function (ret) {
+    if (ret.code < 1) $.msg.error(ret.info, 3, function () {
+     $('#CookieTable').trigger('reload');
+    }); else $('#CookieTable').trigger('reload');
+    return false;
+   }, false);
+  });
+ });
+</script>
+{/block}

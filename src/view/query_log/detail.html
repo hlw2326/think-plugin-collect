@@ -1,0 +1,96 @@
+{extend name="../../admin/view/form"}
+
+{block name="content"}
+<form class="layui-form layui-card" autocomplete="off" style="padding:20px">
+    <div class="layui-row layui-col-space15">
+
+        <div class="layui-col-xs4">
+            <label class="layui-form-label block">{:lang('平台')}</label>
+            <div class="layui-form-mid">{{- $.platformLabel('{$vo.platform|default=""}') }}</div>
+        </div>
+
+        <div class="layui-col-xs4">
+            <label class="layui-form-label block">{:lang('渠道')}</label>
+            <div class="layui-form-mid">{{- '{$vo.channel|default="-"}' }}</div>
+        </div>
+
+        <div class="layui-col-xs4">
+            <label class="layui-form-label block">{:lang('查询动作')}</label>
+            <div class="layui-form-mid">{{- $.actionLabel('{$vo.action|default=""}') }}</div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <label class="layui-form-label block">{:lang('查询参数')}</label>
+            <div class="layui-form-mid" style="word-break:break-all">{{- '{$vo.param|default="-"}' }}</div>
+        </div>
+
+        <div class="layui-col-xs6">
+            <label class="layui-form-label block">HTTP {:lang('状态码')}</label>
+            <div class="layui-form-mid">{{- '{$vo.http_code|default="0"}' }}</div>
+        </div>
+
+        <div class="layui-col-xs6">
+            <label class="layui-form-label block">{:lang('执行耗时')}</label>
+            <div class="layui-form-mid">{{- '{$vo.exec_time|default="0"}' }} ms</div>
+        </div>
+
+        <div class="layui-col-xs6">
+            <label class="layui-form-label block">{:lang('结果')}</label>
+            <div class="layui-form-mid" id="DetailResult"></div>
+        </div>
+
+        <div class="layui-col-xs6">
+            <label class="layui-form-label block">{:lang('请求IP')}</label>
+            <div class="layui-form-mid">{{- '{$vo.ip|default="-"}' }}</div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <label class="layui-form-label block">{:lang('错误信息')}</label>
+            <div class="layui-form-mid color-red" style="word-break:break-all">{{- '{$vo.result_msg|default=""}' }}</div>
+        </div>
+
+        <div class="layui-col-xs12">
+            <label class="layui-form-label block">{:lang('结果数据')}</label>
+            <div class="layui-form-mid" style="background:#f5f5f5;padding:10px;border-radius:4px;max-height:400px;overflow:auto;word-break:break-all;font-size:12px;white-space:pre-wrap">{{- '{$vo.result_data|default=""}' }}</div>
+        </div>
+
+    </div>
+</form>
+
+<label class="layui-hide">
+    <textarea id="PlatformsData">{:json_encode($platforms, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+<label class="layui-hide">
+    <textarea id="ActionsData">{:json_encode($actions, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+<label class="layui-hide">
+    <textarea id="VoData">{:json_encode($vo, JSON_UNESCAPED_UNICODE)}</textarea>
+</label>
+
+<script>
+    $.platformLabel = (function () {
+        var list = JSON.parse($('#PlatformsData').text());
+        return function (p) {
+            var item = list[p];
+            if (!item) return p || '-';
+            return '<span class="layui-badge ' + item.class + '">' + item.label + '</span>';
+        };
+    })();
+
+    $.actionLabel = (function () {
+        var list = JSON.parse($('#ActionsData').text());
+        return function (a) {
+            var item = list[a];
+            if (!item) return a || '-';
+            return '<span class="layui-badge ' + item.class + '">' + item.label + '</span>';
+        };
+    })();
+
+    $(function () {
+        var vo = JSON.parse($('#VoData').text());
+        $('#DetailResult').html(vo.result_code == 1
+            ? '<span class="layui-badge layui-bg-green">{:lang("成功")}</span>'
+            : '<span class="layui-badge layui-bg-red">{:lang("失败")}</span>');
+    });
+</script>
+{/block}
