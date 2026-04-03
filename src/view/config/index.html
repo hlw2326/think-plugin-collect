@@ -1,0 +1,72 @@
+{extend name="main"}
+
+{block name="content"}
+<div class="layui-card padding-20 shadow">
+    <div class="layui-card-header notselect">
+        <span class="help-label">
+            <b style="color:#333!important;">{:lang('采集配置')}</b>
+        </span>
+    </div>
+    <form action="{:sysuri()}" class="layui-form" data-auto="true" method="post">
+        <div class="layui-card-body">
+
+            <div class="layui-form-item">
+                <label class="block relative">
+                    <span class="help-label"><b>{:lang('默认采集平台')}</b>Default Platform</span>
+                    <select name="plugin_collect.default_platform" class="layui-select" lay-append-to>
+                        <option value="">-- {:lang('请选择')} --</option>
+                        {foreach $platforms as $k => $v}
+                        <option value="{$k}" {if sysconf('plugin_collect.default_platform') == $k}selected{/if}>{$v}</option>
+                        {/foreach}
+                    </select>
+                </label>
+                <div class="help-block">{:lang('新建任务时默认选中的平台')}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="block relative">
+                    <span class="help-label"><b>{:lang('请求超时时间')}</b>Request Timeout</span>
+                    <input name="plugin_collect.request_timeout" value='{:sysconf("plugin_collect.request_timeout", 30)}'
+                           placeholder="{:lang('默认 30 秒')}" class="layui-input" type="number" min="1" max="300">
+                </label>
+                <div class="help-block">{:lang('HTTP 请求超时时间，单位秒，建议不超过 300')}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="block relative">
+                    <span class="help-label"><b>{:lang('失败重试次数')}</b>Retry Times</span>
+                    <input name="plugin_collect.retry_times" value='{:sysconf("plugin_collect.retry_times", 3)}'
+                           placeholder="{:lang('默认 3 次')}" class="layui-input" type="number" min="0" max="10">
+                </label>
+                <div class="help-block">{:lang('请求失败后的自动重试次数，0 表示不重试')}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <label class="block relative">
+                    <span class="help-label"><b>{:lang('自定义 User-Agent')}</b>User Agent</span>
+                    <input name="plugin_collect.user_agent"
+                           value='{:sysconf("plugin_collect.user_agent")}'
+                           placeholder="{:lang('留空使用默认 User-Agent')}" class="layui-input">
+                </label>
+                <div class="help-block">{:lang('发送请求时使用的 User-Agent 头，留空使用浏览器默认 UA')}</div>
+            </div>
+
+            <div class="layui-form-item">
+                <span class="help-label"><b>{:lang('启用代理')}</b>Enable Proxy</span>
+                <div class="layui-textarea help-checks layui-bg-gray ta-pl-15">
+                    <input type="radio" name="plugin_collect.enable_proxy" value="1"
+                           title="{:lang('启用')}" {if sysconf('plugin_collect.enable_proxy') == 1}checked{/if}>
+                    <input type="radio" name="plugin_collect.enable_proxy" value="0"
+                           title="{:lang('禁用')}" {if sysconf('plugin_collect.enable_proxy') != 1}checked{/if}>
+                </div>
+                <div class="help-block">{:lang('启用后系统将优先使用配置的代理服务器发起采集请求')}</div>
+            </div>
+
+        </div>
+        <div class="hr-line-dashed"></div>
+        <div class="layui-form-item text-center">
+            <button class="layui-btn" type="submit">{:lang('保存配置')}</button>
+        </div>
+    </form>
+</div>
+{/block}

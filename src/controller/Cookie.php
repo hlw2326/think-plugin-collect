@@ -59,7 +59,7 @@ class Cookie extends Controller
     {
         $this->_applyFormToken();
         $this->title = '添加Cookie';
-        PluginCollectCookie::mForm('cookie/form');
+        PluginCollectCookie::mForm('form');
     }
 
     /**
@@ -70,7 +70,7 @@ class Cookie extends Controller
     {
         $this->_applyFormToken();
         $this->title = '编辑Cookie';
-        PluginCollectCookie::mForm('cookie/form');
+        PluginCollectCookie::mForm('form');
     }
 
     /**

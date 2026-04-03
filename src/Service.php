@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace plugin\collect;
@@ -32,24 +33,24 @@ class Service extends Plugin
         $code = app(static::class)->appCode;
         return [
             [
-                'name' => '采集接口',
-                'subs' => [
-                [
-                    'name' => '采集配置',
-                    'icon' => 'layui-icon layui-icon-set',
-                    'node' => "{$code}/config/index",
-                ],
-                [
-                    'name' => 'Cookie管理',
-                    'icon' => 'layui-icon layui-icon-survey',
-                    'node' => "{$code}/cookie/index",
-                ],
-                [
-                    'name' => '查询日志',
-                    'icon' => 'layui-icon layui-icon-log',
-                    'node' => "{$code}/query_log/index",
-                ],
-                ],
+                'name' => '采集配置',
+                'icon' => 'layui-icon layui-icon-set',
+                'node' => "{$code}/config/index",
+            ],
+            [
+                'name' => 'Cookie管理',
+                'icon' => 'layui-icon layui-icon-survey',
+                'node' => "{$code}/cookie/index",
+            ],
+            [
+                'name' => '查询日志',
+                'icon' => 'layui-icon layui-icon-log',
+                'node' => "{$code}/query_log/index",
+            ],
+            [
+                'name' => '标签列表',
+                'icon' => 'iconfont iconfont-tag',
+                'node' => "{$code}/tag/index",
             ],
         ];
     }

@@ -20,6 +20,13 @@ class Config extends Controller
     public function index(): void
     {
         $this->title = '采集配置';
+        $this->platforms = [
+            'default' => lang('默认'),
+            'toutiao' => 'TouTiao',
+            'weibo' => lang('微博'),
+            'douyin' => lang('抖音'),
+            'xiaohongshu' => lang('小红书'),
+        ];
 
         if ($this->request->isPost()) {
             $post = $this->request->post();
