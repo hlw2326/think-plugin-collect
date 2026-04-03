@@ -60,25 +60,6 @@
    </div>
   </fieldset>
 
-  <fieldset class="layui-bg-gray">
-   <legend><b class="layui-badge think-bg-violet">{:lang('其他设置')}</b></legend>
-   <div class="layui-row layui-col-space15">
-
-    <div class="layui-col-xs6">
-     <div class="help-label"><b>{:lang('启用状态')}</b>Status</div>
-     <div class="layui-textarea help-checks">
-      <label class="think-checkbox">
-       <input type="radio" name="status" value="1" {if !isset($vo.status) or $vo.status eq 1}checked{/if} lay-ignore>{:lang('启 用')}
-      </label>
-      <label class="think-checkbox">
-       <input type="radio" name="status" value="0" {if isset($vo.status) and $vo.status eq 0}checked{/if} lay-ignore>{:lang('禁 用')}
-      </label>
-     </div>
-    </div>
-
-   </div>
-  </fieldset>
-
  </div>
 
  <div class="hr-line-dashed"></div>

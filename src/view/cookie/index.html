@@ -38,6 +38,15 @@
     {{# } }}
 </script>
 
+
+<script type="text/html" id="ErrorCountTpl">
+    {{# if(d.error_count > 0){ }}
+    <span class="color-red">{{d.error_count}}</span>
+    {{# }else{ }}
+    <span class="color-green">0</span>
+    {{# } }}
+</script>
+
 <script type="text/html" id="StatusSwitchTpl">
     <!--{if auth("state")}-->
     <input type="checkbox" value="{{d.id}}" lay-skin="switch" lay-text="{:lang('已启用')}|{:lang('已禁用')}" lay-filter="StatusSwitch" {{-d.status>0?'checked':''}}>
@@ -81,13 +90,13 @@
             cols: [[
                 {checkbox: true, fixed: true},
                 {field: 'id', title: 'ID', width: 70, align: 'center', sort: true},
-                {field: 'name', title: '{:lang("名称")}', minWidth: 120},
-                {field: 'platform', title: '{:lang("平台")}', width: 100, align: 'center', templet: '#PlatformBadgeTpl'},
-                {field: 'channel', title: '{:lang("渠道")}', width: 80, align: 'center', templet: '#ChannelBadgeTpl'},
-                {field: 'account', title: '{:lang("关联账号")}', minWidth: 120},
+                {field: 'name', title: '{:lang("名称")}', minWidth: 160},
+                {field: 'platform', title: '{:lang("平台")}', width: 160, align: 'center', templet: '#PlatformBadgeTpl'},
+                {field: 'channel', title: '{:lang("渠道")}', width: 160, align: 'center', templet: '#ChannelBadgeTpl'},
+                {field: 'account', title: '{:lang("关联账号")}', minWidth: 160},
                 {field: 'last_verify_time', title: '{:lang("最后验证")}', width: 160, align: 'center', templet: '#LastVerifyTpl'},
-                {field: 'error_count', title: '{:lang("失败次数")}', width: 100, align: 'center', templet: '<div>{{d.error_count > 0 ? \'<span class="color-red">\' + d.error_count + \'</span>\' : \'<span class="color-green">0</span>\'}}</div>'},
-                {field: 'status', title: '{:lang("状态")}', width: 100, align: 'center', templet: '#StatusSwitchTpl'},
+                {field: 'error_count', title: '{:lang("失败次数")}', width: 160, align: 'center', templet: '#ErrorCountTpl'},
+                {field: 'status', title: '{:lang("状态")}', width: 160, align: 'center', templet: '#StatusSwitchTpl'},
                 {field: 'create_at', title: '{:lang("创建时间")}', width: 160, align: 'center', sort: true},
                 {toolbar: '#toolbar', title: '{:lang("操作面板")}', width: 200, align: 'left', fixed: 'right'}
             ]]

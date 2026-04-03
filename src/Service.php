@@ -38,8 +38,8 @@ class Service extends Plugin
                 'node' => "{$code}/config/index",
             ],
             [
-                'name' => 'Cookie管理',
-                'icon' => 'layui-icon layui-icon-survey',
+                'name' => '状态管理',
+                'icon' => 'layui-icon layui-icon-senior',
                 'node' => "{$code}/cookie/index",
             ],
             [
