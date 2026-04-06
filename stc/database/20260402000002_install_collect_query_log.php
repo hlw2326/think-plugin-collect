@@ -16,28 +16,31 @@ class InstallCollectQueryLog extends Migrator
     public function up(): void
     {
         $table = $this->table('plugin_collect_query_log', [
+            'engine' => 'InnoDB',
+            'collation' => 'utf8mb4_general_ci',
             'comment' => '插件-采集查询日志',
-            'id'      => 'id',
         ]);
 
-        $table->addColumn('cookie_id', 'integer', ['limit' => 11, 'default' => 0, 'signed' => false, 'comment' => '关联CookieID'])
-              ->addColumn('platform', 'string', ['limit' => 20, 'default' => '', 'comment' => '平台标识（dy/ks/bili/xhs/sph/tk）'])
-              ->addColumn('channel', 'string', ['limit' => 20, 'default' => '', 'comment' => '渠道类型（web/h5/app）'])
-              ->addColumn('action', 'string', ['limit' => 30, 'default' => '', 'comment' => '查询动作（verify/user_info/feeds/content_info）'])
-              ->addColumn('param', 'text', ['comment' => '查询参数（uid/content_id等）'])
-              ->addColumn('http_code', 'integer', ['limit' => 5, 'default' => 0, 'signed' => false, 'comment' => 'HTTP状态码'])
-              ->addColumn('exec_time', 'integer', ['limit' => 11, 'default' => 0, 'signed' => false, 'comment' => '执行耗时(毫秒)'])
-              ->addColumn('result_code', 'integer', ['limit' => 1, 'default' => 1, 'signed' => false, 'comment' => '结果码(0失败,1成功)'])
-              ->addColumn('result_msg', 'string', ['limit' => 500, 'default' => '', 'comment' => '错误信息'])
-              ->addColumn('result_data', 'text', ['comment' => '结果数据摘要(JSON,最多前2000字符)'])
-              ->addColumn('ip', 'string', ['limit' => 50, 'default' => '', 'comment' => '请求来源IP'])
-              ->addColumn('create_at', 'timestamp', ['default' => 'CURRENT_TIMESTAMP', 'comment' => '查询时间'])
-              ->addIndex('platform')
-              ->addIndex('action')
-              ->addIndex('result_code')
-              ->addIndex('create_at')
-              ->addIndex('cookie_id')
-              ->save();
+        PhinxExtend::upgrade($table, [
+            ['cookie_id', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '关联CookieID']],
+            ['platform', 'string', ['limit' => 20, 'default' => '', 'null' => true, 'comment' => '平台标识（dy/ks/bili/xhs/sph/tk）']],
+            ['channel', 'string', ['limit' => 20, 'default' => '', 'null' => true, 'comment' => '渠道类型（web/h5/app）']],
+            ['action', 'string', ['limit' => 30, 'default' => '', 'null' => true, 'comment' => '查询动作（verify/user_info/feeds/content_info）']],
+            ['param', 'text', ['default' => null, 'null' => true, 'comment' => '查询参数（uid/content_id等）']],
+            ['http_code', 'integer', ['limit' => 5, 'default' => 0, 'null' => true, 'comment' => 'HTTP状态码']],
+            ['exec_time', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '执行耗时(毫秒)']],
+            ['result_code', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '结果码(0失败,1成功)']],
+            ['result_msg', 'string', ['limit' => 500, 'default' => '', 'null' => true, 'comment' => '错误信息']],
+            ['result_data', 'text', ['default' => null, 'null' => true, 'comment' => '结果数据摘要(JSON,最多前2000字符)']],
+            ['ip', 'string', ['limit' => 50, 'default' => '', 'null' => true, 'comment' => '请求来源IP']],
+            ['create_at', 'datetime', ['default' => null, 'null' => true, 'comment' => '查询时间']],
+        ], [
+            'platform',
+            'action',
+            'result_code',
+            'create_at',
+            'cookie_id',
+        ]);
     }
 
     /**
