@@ -6,6 +6,84 @@
 
 ---
 
+## 用户解析器注册
+
+插件通过 `UserResolverService` 获取当前登录用户 ID，**具体实现由主应用注册**：
+
+```php
+// 在主应用初始化时注册（参考 app/mini/service/ 或插件文档）
+use hlw2326\mp\shared\service\UserResolverService;
+
+UserResolverService::register(function (string $appid): ?string {
+    return \app\mini\model\MiniUser::getCurrentUserId($appid);
+});
+```
+
+---
+
+## API 接口
+
+ThinkAdmin 插件根据控制器命名空间自动发现路由。
+
+路由映射规则：`plugin\{code}\controller\{module}\{controller}@{action}`
+
+本插件 `{code}` 为 `collect`，控制器在 `controller/api/v1/` 下：
+
+```
+plugin\collect\controller\api\v1\Collect::platforms → /collect/api/v1/collect/platforms
+plugin\collect\controller\api\v1\Collect::cookies    → /collect/api/v1/collect/cookies
+plugin\collect\controller\api\v1\Collect::query      → /collect/api/v1/collect/query
+plugin\collect\controller\api\v1\Collect::my          → /collect/api/v1/collect/my
+plugin\collect\controller\api\v1\Collect::stats       → /collect/api/v1/collect/stats
+```
+
+### 接口认证
+
+| 参数 | 位置 | 说明 |
+|---|---|---|
+| `appid` | Header / GET / POST | 小程序标识，用于解析用户身份 |
+
+### 接口列表
+
+| 接口 | 方法 | 登录 | 说明 |
+|---|---|---|---|
+| `/collect/api/v1/collect/platforms` | GET | 否 | 获取支持的平台列表 |
+| `/collect/api/v1/collect/cookies` | GET | 否 | 获取可用 Cookie 列表 |
+| `/collect/api/v1/collect/query` | POST | 是 | 执行采集查询 |
+| `/collect/api/v1/collect/my` | GET | 是 | 获取当前用户的查询记录 |
+| `/collect/api/v1/collect/stats` | GET | 是 | 获取当前用户的查询统计 |
+
+### 采集查询接口
+
+```
+POST /collect/api/v1/collect/query
+```
+
+**请求参数：**
+
+| 参数 | 类型 | 必填 | 说明 |
+|---|---|---|---|
+| `platform` | string | 是 | 平台标识（dy/ks/bili/xhs/sph/tk） |
+| `action` | string | 是 | 查询动作（verify/user_info/feeds/content_info） |
+| `cookie_id` | int | 否 | Cookie 记录 ID（从 cookies 接口获取） |
+| `uid` | string | 条��� | 用户ID（action=user_info 时必填） |
+| `content_id` | string | 条件 | 内容ID（action=content_info 时必填） |
+
+**返回示例：**
+
+```json
+{
+  "code": 1,
+  "info": "查询成功",
+  "data": {
+    "data": {...},
+    "exec_time": 123
+  }
+}
+```
+
+---
+
 ## 技术特性
 
 - **php-curl-class**：基于 `php-curl-class/php-curl-class ^9.8` 封装，所有 HTTP 请求统一经过 Curl 类
@@ -160,10 +238,16 @@ think-collect/
     ├── Service.php                    # 插件服务注册
     ├── contract/
     │   ├── Adapter.php               # 采集适配器接口
-    │   └── BaseAdapter.php           # 抽象基类（Curl 封装）
+    │   ├── BaseAdapter.php           # 抽象基类（Curl 封装）
+    │   └── UserResolver.php           # 用户解析器接口
+    ├── controller/
+    │   └── api/v1/
+    │       ├── Base.php              # API 基础控制器
+    │       └── Collect.php           # 采集 API 控制器
     ├── service/
     │   ├── CollectService.php        # 主采集管理器
-    │   └── Config.php                # HTTP 请求配置对象
+    │   ├── Config.php                # HTTP 请求配置对象
+    │   └── UserResolverService.php   # 用户解析器服务
     └── adapter/
         ├── dy/    (Dy.php, DyWeb.php, DyH5.php)
         ├── ks/    (Ks.php, KsWeb.php, KsH5.php)

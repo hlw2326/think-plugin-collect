@@ -11,10 +11,11 @@
         }
     ],
     "require": {
-        "php": ">8.2",
+        "php": ">=8.2",
         "ext-json": "*",
         "ext-curl": "*",
-        "php-curl-class/php-curl-class": "^9.8"
+        "php-curl-class/php-curl-class": "^9.8",
+        "hlw2326/think-plugin-mp-shared": "*"
     },
     "autoload": {
         "psr-4": {
