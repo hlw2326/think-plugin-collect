@@ -22,17 +22,61 @@ class InstallCollectCookie extends Migrator
         ]);
 
         PhinxExtend::upgrade($table, [
-            ['name', 'string', ['limit' => 255, 'default' => '', 'null' => true, 'comment' => '名称']],
-            ['account', 'string', ['limit' => 255, 'default' => '', 'null' => true, 'comment' => '关联账号']],
-            ['platform', 'string', ['limit' => 20, 'default' => '', 'null' => true, 'comment' => '平台标识（dy/ks/bili/xhs/sph/tk）']],
-            ['channel', 'string', ['limit' => 20, 'default' => '', 'null' => true, 'comment' => '渠道类型（web/h5/app）']],
-            ['cookie', 'text', ['default' => null, 'null' => true, 'comment' => 'Cookie内容']],
-            ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态(0禁用,1启用)']],
-            ['last_verify_time', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '最后验证时间戳']],
-            ['last_use_time', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '最后使用时间戳']],
-            ['error_count', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '连续失败次数']],
-            ['create_at', 'datetime', ['default' => null, 'null' => true, 'comment' => '创建时间']],
-            ['update_at', 'datetime', ['default' => null, 'null' => true, 'comment' => '更新时间']],
+            [
+                'name',
+                'string',
+                ['limit' => 255, 'default' => '', 'null' => true, 'comment' => '名称']
+            ],
+            [
+                'account',
+                'string',
+                ['limit' => 255, 'default' => '', 'null' => true, 'comment' => '关联账号']
+            ],
+            [
+                'platform',
+                'string',
+                ['limit' => 20, 'default' => '', 'null' => true, 'comment' => '平台标识（dy/ks/bili/xhs/sph/tk）']
+            ],
+            [
+                'channel',
+                'string',
+                ['limit' => 20, 'default' => '', 'null' => true, 'comment' => '渠道类型（web/h5/app）']
+            ],
+            [
+                'cookie',
+                'text',
+                ['default' => null, 'null' => true, 'comment' => 'Cookie内容']
+            ],
+            [
+                'status',
+                'integer',
+                ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态(0禁用,1启用)']
+            ],
+            [
+                'last_verify_time',
+                'integer',
+                ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '最后验证时间戳']
+            ],
+            [
+                'last_use_time',
+                'integer',
+                ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '最后使用时间戳']
+            ],
+            [
+                'error_count',
+                'integer',
+                ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '连续失败次数']
+            ],
+            [
+                'create_at',
+                'datetime',
+                ['default' => null, 'null' => true, 'comment' => '创建时间']
+            ],
+            [
+                'update_at',
+                'datetime',
+                ['default' => null, 'null' => true, 'comment' => '更新时间']
+            ],
         ], [
             'platform',
             'status',

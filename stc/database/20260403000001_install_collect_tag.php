@@ -22,12 +22,36 @@ class InstallCollectTag extends Migrator
         ]);
 
         PhinxExtend::upgrade($table, [
-            ['name', 'string', ['limit' => 255, 'default' => '', 'null' => true, 'comment' => '标签分类名称']],
-            ['value', 'text', ['default' => null, 'null' => true, 'comment' => '子标签（逗号分隔）']],
-            ['sort', 'integer', ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '排序权重']],
-            ['status', 'integer', ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态(0禁用,1启用)']],
-            ['create_at', 'datetime', ['default' => null, 'null' => true, 'comment' => '创建时间']],
-            ['update_at', 'datetime', ['default' => null, 'null' => true, 'comment' => '更新时间']],
+            [
+                'name',
+                'string',
+                ['limit' => 255, 'default' => '', 'null' => true, 'comment' => '标签分类名称']
+            ],
+            [
+                'value',
+                'text',
+                ['default' => null, 'null' => true, 'comment' => '子标签（逗号分隔）']
+            ],
+            [
+                'sort',
+                'integer',
+                ['limit' => 11, 'default' => 0, 'null' => true, 'comment' => '排序权重']
+            ],
+            [
+                'status',
+                'integer',
+                ['limit' => 1, 'default' => 1, 'null' => true, 'comment' => '状态(0禁用,1启用)']
+            ],
+            [
+                'create_at',
+                'datetime',
+                ['default' => null, 'null' => true, 'comment' => '创建时间']
+            ],
+            [
+                'update_at',
+                'datetime',
+                ['default' => null, 'null' => true, 'comment' => '更新时间']
+            ],
         ], [
             'name',
             'status',
